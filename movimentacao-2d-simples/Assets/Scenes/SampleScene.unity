@@ -238,6 +238,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidadeHorizontal: 10
+  alturaDoPulo: 18
+  tamanhoDoRaioDeVerificacaoDeChao: 0.3
+  verificadorDeChao: {fileID: 225912156}
+  layersDoChao:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +421,7 @@ GameObject:
   - component: {fileID: 1460580299}
   - component: {fileID: 1460580298}
   - component: {fileID: 1460580297}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Piso
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,20 +12,28 @@ public class MovimentoDoJogador : MonoBehaviour
     private float inputHorizontal;
     private bool indoParaDireita;
 
+    [Header("Pulo")]
+    [SerializeField] private float alturaDoPulo;
+    [SerializeField] private float tamanhoDoRaioDeVerificacaoDeChao;
+    [SerializeField] private Transform verificadorDeChao;
+    [SerializeField] private LayerMask layersDoChao;
+    private bool estaNoChao;
+    private bool podePular;
+
     private void Awake()
     {
         oRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         indoParaDireita = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        VerificarAmbiente();
+        VerificarSePodePular();
         ReceberInputs();
         VerificarDirecaoDoMovimento();
         EspelharNaHorizontal();
@@ -36,9 +44,31 @@ public class MovimentoDoJogador : MonoBehaviour
         AplicarMovimento();
     }
 
+    private void VerificarAmbiente()
+    {
+        estaNoChao = Physics2D.OverlapCircle(verificadorDeChao.position, tamanhoDoRaioDeVerificacaoDeChao, layersDoChao);
+    }
+
+    private void VerificarSePodePular()
+    {
+        if (estaNoChao)
+        {
+            podePular = true;
+        }
+        else
+        {
+            podePular = false;
+        }
+    }
+
     private void ReceberInputs()
     {
         inputHorizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            Pular();
+        }
     }
 
     private void VerificarDirecaoDoMovimento()
@@ -68,5 +98,19 @@ public class MovimentoDoJogador : MonoBehaviour
     private void AplicarMovimento()
     {
         oRigidbody2D.velocity = new Vector2(inputHorizontal * velocidadeHorizontal, oRigidbody2D.velocity.y);
+    }
+
+    private void Pular()
+    {
+        if (podePular)
+        {
+            oRigidbody2D.velocity = new Vector2(oRigidbody2D.velocity.x, alturaDoPulo);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        // Desenha o VerificadorDeChao na aba Scene
+        Gizmos.DrawWireSphere(verificadorDeChao.position, tamanhoDoRaioDeVerificacaoDeChao);
     }
 }
